@@ -196,40 +196,14 @@ List<PlatformMenuItem> mailMenus(AppLocalizations l, MailMenuModel m) {
   ];
 }
 
-SilicaMenu _appMenu(AppLocalizations l, MailMenuModel m) => SilicaMenu(
-  label: l.appTitle,
-  role: SilicaMenuRole.app,
-  menus: [
-    _group([
-      SilicaMenuItem(
-        label: l.menuAboutMail,
-        role: SilicaMenuItemRole.about,
-        enabled: false,
-      ),
-    ]),
-    _group([
-      SilicaMenuItem(
-        label: l.menuSettingsDots,
-        role: SilicaMenuItemRole.settings,
-        shortcut: const SingleActivator(LogicalKeyboardKey.comma, meta: true),
-        enabled: false,
-      ),
-      _item(l.menuAccountsDots, run: m.openAccounts),
-    ]),
+/// The standard app menu of silica_ui (silica-ui#99): About Mail (the standard About panel),
+/// no Settings… (Mail has no settings window yet, so the item is not shown), Accounts… and
+/// Add Account…, then the system items.
+SilicaMenu _appMenu(AppLocalizations l, MailMenuModel m) => SilicaMenus.app(
+  l.appTitle,
+  items: [
+    _item(l.menuAccountsDots, run: m.openAccounts),
     _group([_item(l.menuAddAccountDots, run: m.openAccounts)]),
-    const PlatformMenuItemGroup(
-      members: [SilicaMenuItem.system(SilicaMenuItemRole.services)],
-    ),
-    const PlatformMenuItemGroup(
-      members: [
-        SilicaMenuItem.system(SilicaMenuItemRole.hide),
-        SilicaMenuItem.system(SilicaMenuItemRole.hideOthers),
-        SilicaMenuItem.system(SilicaMenuItemRole.showAll),
-      ],
-    ),
-    const PlatformMenuItemGroup(
-      members: [SilicaMenuItem.system(SilicaMenuItemRole.quit)],
-    ),
   ],
 );
 

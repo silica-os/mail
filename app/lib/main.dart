@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:silica_ui/silica_ui.dart';
 
+import 'src/app_info.dart';
 import 'src/compose.dart';
 import 'src/l10n.dart';
 import 'src/service.dart';
@@ -14,6 +15,8 @@ import 'src/window.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  // About Mail and the standard app menu (silica-ui#99).
+  SilicaApp.info = appInfo;
   // The toolbar is unified with the window: Ossido draws only the window buttons.
   SilicaWindow.setFullSizeContent(AmalfiToolbarMetrics.toolbarHeight).ignore();
   setMinimumSize().ignore();

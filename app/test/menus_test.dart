@@ -131,12 +131,15 @@ void main() {
         'window',
         'help',
       ]);
-      // The app menu: the accounts work, About and Settings are there but grayed.
+      // The app menu: the accounts work; About is the standard one, enabled, and there is no
+      // Settings… placeholder (silica-ui#99).
       expect(on('Accounts…'), isTrue);
       expect(on('Add Account…'), isTrue);
-      expect(on('About Mail'), isFalse);
-      expect(on('Settings…'), isFalse);
-      expect(item('Settings…')['shortcut'], {'key': ',', 'meta': true});
+      expect(byRole('Mail', 'about')['enabled'], isTrue);
+      expect(
+        children(menus().first).where((i) => i['role'] == 'settings'),
+        isEmpty,
+      );
       final roles = children(menus().first).map((i) => i['role']);
       expect(
         roles,
@@ -459,6 +462,35 @@ void main() {
     expect(find.byKey(const ValueKey('search field')), findsOneWidget);
   });
 
+  testWidgets(
+    'the standard app menu: About enabled, no Settings placeholder, Accounts (silica-ui#99)',
+    (tester) async {
+      await pump(tester);
+      final app = menus().first;
+      expect(app['role'], 'app');
+      expect(
+        [for (final i in children(app)) i['role'] ?? i['label'] ?? '—'],
+        [
+          'about',
+          '—',
+          'Accounts…',
+          '—',
+          'Add Account…',
+          '—',
+          'services',
+          '—',
+          'hide',
+          'hide_others',
+          'show_all',
+          '—',
+          'quit',
+        ],
+      );
+      expect(children(app).first['enabled'], isTrue);
+      expect(children(app).first['id'], isA<int>());
+    },
+  );
+
   testWidgets('the unavailable items are shown, never hidden', (tester) async {
     await pump(tester);
     // A sample of each menu's features that Mail does not have yet.
@@ -503,6 +535,5 @@ void main() {
     expect(exists('Ricevi nuovi messaggi'), isTrue);
     expect(exists('Sincronizza “Alex Rivera”'), isTrue);
     expect(exists('Nascondi barra laterale'), isTrue);
-    expect(exists('Impostazioni…'), isTrue);
   });
 }

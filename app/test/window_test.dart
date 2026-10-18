@@ -49,6 +49,7 @@ Future<void> tapRow(WidgetTester tester, String id) async {
 }
 
 void main() {
+  dividerExtentTests();
   tearDown(() => useLocale(const Locale('en')));
 
   testWidgets('the inbox lists conversations, newest first, with unread dots', (
@@ -760,4 +761,21 @@ void main() {
 /// Keeps the model import used (flags are checked through the fake above).
 abstract final class MailFlagCheck {
   static bool get ok => MessageFlag.values.length == 4;
+}
+
+void dividerExtentTests() {
+  testWidgets('the list/message divider runs from the top of the window', (
+    tester,
+  ) async {
+    await pump(tester);
+    final lines = find.byType(AmalfiWindowSeparator);
+    expect(lines, findsWidgets);
+    final window = tester.getRect(find.byType(MailWindow));
+    for (final e in lines.evaluate()) {
+      final r = tester.getRect(find.byElementPredicate((x) => x == e));
+      expect(r.top, window.top);
+      expect(r.bottom, window.bottom);
+      expect(r.width, 1);
+    }
+  });
 }

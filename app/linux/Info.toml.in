@@ -1,0 +1,30 @@
+# Mail as a Silica app bundle (silica-os docs/app-bundles.md): silica-packages and
+# `cargo xtask os deploy` fill the placeholders and sign it. A system app: from /usr/Applications
+# it runs without a sandbox; [permissions] is what a copy elsewhere is given.
+# Mail talks to its engine (silica-mail-engine, dev.frascella.Mail on the session bus), which
+# does the network work: the app needs the network only through it, and talks to it.
+format = 1
+id = "dev.frascella.Mail"
+name = "Mail"
+"name.it" = "Posta"
+generic_name = "Mail Client"
+comment = "Read and write email"
+version = "@VERSION@"
+build = @BUILD@
+minimum_silica = "0.2.0"
+kind = "flutter"
+runtime = "dev.silica.Platform//1"
+args = ["--size", "1200x760", "--title", "Mail", "--multi-window"]
+categories = ["Network", "Email"]
+keywords = ["email", "mail", "imap", "smtp", "inbox", "posta", "messaggi"]
+share = true
+
+[permissions]
+network = true
+devices = "gpu"
+filesystem = ["xdg-download"]
+talk = ["dev.frascella.Mail"]
+
+[developer]
+name = "Silica"
+key = "@DEVELOPER_KEY@"
